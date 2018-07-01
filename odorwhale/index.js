@@ -5,9 +5,7 @@ var exec = require('child_process').exec;
 
 // Store our app's ID and Secret. These we got from Step 1.
 // For this tutorial, we'll keep your API credentials right here. But for an actual app, you'll want to  store them securely in environment variables.
-//var clientId = '42945109218.183907997622';
 var clientId = '374715646114.376556155424';
-//var clientSecret = 'XXXXXXXXXXXXXXXXXXXXXX';
 var clientSecret = '09406a900e3d13c2d7e4e8a5fbd1c688';
 
 // Instantiates Express and assigns our app variable to it
@@ -56,42 +54,44 @@ app.get('/oauth', function(req, res) {
     }
 });
 
-var count = 0;
+
+var count = 0;  //使用回数
 var child;
-
-//var spawn = require('child_process').spawn,
-//    py    = spawn('python', [odor_detect.py]),
-//    data  = 1,
-//    dataString = "";
-
+var timetxt;
+var now;
+var month, date, hour, min, sec;
 // Route the endpoint that our slash command will point to and send back a simple response to indicate that ngrok is working
 app.post('/command', function(req, res) {	//req :ブラウザから送られてくるものすべて
+
+    //日付，時刻の取得
+    //var now = new Date();
+
+    if (count == 0){
+        timetxt = "                  /aromaはありません．";
+      }
+    else{
+      timetxt = "                  "+ month + "月" + date + "日" + hour + ":" + min + ":" + sec;
+    }
+
     count ++;
-    console.log(count);
-    res.send('/exampleを'+count+'回送信しました．');
-    
+    res.send('今日も研究お疲れ様です!!\n合計'+count+'回癒やしました。\nその調子で研究頑張ってください！\n-----前回の/aromaコマンド使用時刻-----\n'+timetxt);
+
     //サーボモータのみを動かす場合
     child = exec("python servo_motor.py", function (error, stdout, stderr) {
-    //匂い検知プログラムを起動させる場合
-    //child = exec("python odor_detect.py", function (error, stdout, stderr) {
-    	console.log(count+'回サーボを起動しました．')
-        //console.log('stdout: ' + stdout);
+    	console.log(count+'回/aromaを実行しました．')
+      //console.log('stdout: ' + stdout);
     	//console.log('stderr: ' + stderr);
     	if (error !== null) {
     	   console.log('exec error: ' + error);
     	}
-    });
-    
-    //匂い検知プログラムにフラグを渡す場合(未完成)
-    //py.stdout.on('data', function(data)){
-    //    dataString += data.toString();
-    //});
-    //py.stdout.on('end', function(){
-    //    console.log("flag applied");
-    //});
-    //py.stdin.write(JSON.stringify(data));
-    //py.stdin.end();
 
-    
+      //日付，時刻の取得
+      now = new Date();
+      month = now.getMonth() + 1;
+      date = now.getDate();
+      hour = now.getHours();
+      min = now.getMinutes();
+      sec = now.getSeconds();
+    });
 
 });

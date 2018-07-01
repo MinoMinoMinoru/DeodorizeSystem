@@ -13,7 +13,7 @@ $(function() {
       content : "application/json",
       dataType : "json",
     }).done(function(data) {
-      console.log(data.smell);
+      //console.log(data.smell);
       var txt = "臭い：" + data.smell;
       document.getElementById("smellTxt").innerHTML = txt;
       //$("dd").text(data.count);//html要素変更する
